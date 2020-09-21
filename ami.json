@@ -1,0 +1,41 @@
+{
+  "variables": {
+    "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
+    "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
+    "region": "eu-west-2"
+  },
+  "builders": [
+    {
+      "access_key": "{{user `aws_access_key`}}",
+      "ami_name": "glasswall-reverseproxy-{{timestamp}}",
+      "instance_type": "t2.large",
+      "region": "{{user `region`}}",
+      "secret_key": "{{user `aws_secret_key`}}",
+      "source_ami": "ami-00db2b50b3b025163",
+      "ssh_username": "ubuntu",
+      "ssh_timeout": "10m",
+      "type": "amazon-ebs"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "{{.Vars}} sudo -S -E bash '{{.Path}}' ubuntu",
+      "script": "scripts/install.sh",
+      "pause_before": "10s"
+    },
+    {
+      "type": "file",
+      "source": "k8-reverse-proxy/stable-src",
+      "destination": "/home/ubuntu/reverse-proxy-icap-docker"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "cd reverse-proxy-icap-docker/",
+        "wget -O c-icap/Glasswall-Rebuild-SDK-Evaluation/Linux/Library/libglasswall.classic.so https://raw.githubusercontent.com/filetrust/Glasswall-Rebuild-SDK-Evaluation/master/Linux/Library/libglasswall.classic.so",
+        "sudo -S -E su ubuntu -c 'docker-compose up -d'"
+      ]
+    }
+  ]
+}
