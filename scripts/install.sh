@@ -1,5 +1,4 @@
 #!/bin/bash
-SSH_USER=${SSH_USERNAME:-user}
 DEBIAN_FRONTEND=noninteractive
 
 sudo apt-get update && sudo apt-get install curl git -y
@@ -15,12 +14,9 @@ sudo curl -L "https://github.com/docker/compose/releases/download/1.27.0/docker-
 
 sudo chmod +x /usr/local/bin/docker-compose
 
-rm VBoxGuest*.iso
-#!/bin/bash
-
 sed -i 's/GRUB_CMDLINE_LINUX=""/GRUB_CMDLINE_LINUX="net.ifnames=0 biosdevname=0"/g' /etc/default/grub
 update-grub
-rm /etc/netplan/*.yml /etc/netplan/*.yaml
+rm -f /etc/netplan/*.yml /etc/netplan/*.yaml VBoxGuest*.iso
 cat > /etc/netplan/network.yaml <<EOF
 network:
   version: 2
