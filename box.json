@@ -9,15 +9,13 @@
       },
   {
       "type": "file",
-      "source": "revproxy.tar.gz",
-      "destination":"/tmp/revproxy.tar.gz"
+      "source": "k8-reverse-proxy/stable-src/",
+      "destination":"/home/user/reverse-proxy-icap-docker/"
   },
   {
         "type": "shell",
         "inline": [
-         "mkdir reverse-proxy-icap-docker/",
          "cd reverse-proxy-icap-docker/",
-         "tar xzvf /tmp/revproxy.tar.gz",
          "wget -O c-icap/Glasswall-Rebuild-SDK-Evaluation/Linux/Library/libglasswall.classic.so https://raw.githubusercontent.com/filetrust/Glasswall-Rebuild-SDK-Evaluation/master/Linux/Library/libglasswall.classic.so",
         "echo 'secret' | sudo -S -E su user -c 'docker-compose up -d'"
          ]
