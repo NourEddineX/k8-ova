@@ -11,3 +11,16 @@ subfilter_patterns: # Subfilter pattern (Rewrite URLs in responses)
     replace: .gov.uk.glasswall-icap.com
   - match: .amazonaws.com
     replace: .amazonaws.com.glasswall-icap.com
+overwrite_hosts_records:
+  - ip: 0.0.0.0
+    names:
+    - 1.example.domain.local
+    - 2.example.domain.local
+
+  - ip: 0.0.0.0
+    names:
+    - 3.example.domain.local
+    - 4.example.domain.local
+## hosts overwrites in the example will write the following to /etc/hosts
+# 0.0.0.0 1.example.domain.local 2.example.domain.local
+# 0.0.0.0 3.example.domain.local 4.example.domain.local

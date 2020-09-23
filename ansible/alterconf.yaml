@@ -54,6 +54,16 @@
     notify:
       - recreate containers
 
+  - name: Template for /etc/hosts file
+    template:
+      src: templates/hosts.j2
+      dest: "/etc/hosts"
+      owner: "root"
+      group: "roo"
+      mode: '0644'
+    notify:
+      - recreate containers
+
   handlers:
   - name: recreate containers
     docker_compose:

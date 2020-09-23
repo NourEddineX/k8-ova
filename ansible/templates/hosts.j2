@@ -1,0 +1,4 @@
+127.0.0.1 {{ ansible_hostname_short }} {{ ansible_hostname }}
+{% for host in overwrite_hosts_records %}
+{{ host.ip }} {{ host.names | join(' ') }}
+{% endfor %}
