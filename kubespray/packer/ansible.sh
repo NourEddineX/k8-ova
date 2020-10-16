@@ -2,9 +2,12 @@
 export PATH=$PATH:$HOME/.local/bin
 export DEBIAN_FRONTEND=noninteractive
 set -euo pipefail
+sudo apt update
+sudo apt install -y software-properties-common
 sudo add-apt-repository universe
 sudo apt update
-sudo apt install -y python3-pip #python3-setuptools #python3-virtualenv 
+sudo apt install -y python3-pip curl wget #python3-setuptools #python3-virtualenv 
+
 if [ ! -d kubespray ] ; then
     DIR=$(curl -s https://api.github.com/repos/kubernetes-sigs/kubespray/releases/latest | grep "tarball_url" | cut -d : -f 2,3 | \
     tr -d \" | tr -d "," | wget -qi - -O- | tar xzv | tac | tail -n 1 ) # Download latest Kubespray release, extract it and move to "kubespray"
@@ -18,3 +21,4 @@ CONFIG_FILE=kubespray/cluster/hosts.yaml python3 kubespray/contrib/inventory_bui
 echo | ssh-keygen
 cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 ansible-playbook kubespray/cluster.yml -i kubespray/cluster/hosts.yaml --become --become-user root
+

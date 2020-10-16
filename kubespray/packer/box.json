@@ -1,0 +1,56 @@
+{
+    "variables": {
+    },
+    "provisioners": [
+        {
+        "type":"shell",
+        "script":"ansible.sh",
+        "expect_disconnect":true
+        },
+        {
+        "type":"shell",
+        "script":"network.sh",
+	"execute_command": "echo 'secret' | {{.Vars}} sudo -S -E bash '{{.Path}}'"
+        }
+       ],
+    "builders": [
+      {
+        "type": "virtualbox-ovf",
+	"source_path": "output-virtualbox-iso/glasswall-k8s-base.ova",
+        "boot_command": [],
+        "boot_wait": "10s",
+        "headless": true,
+        "http_directory": "http",
+        "ssh_username": "user",
+        "ssh_password": "secret",
+        "ssh_port": 22,
+        "ssh_wait_timeout": "1800s",
+        "shutdown_command": "echo 'secret' | sudo -S shutdown -P now",
+        "vm_name": "glasswall-k8s",
+        "format": "ova",
+        "vboxmanage": [
+          [
+		"modifyvm",
+		"{{.Name}}",
+		"--memory",
+		"4096"
+	  ],
+         [
+		    "modifyvm",
+		    "{{.Name}}",
+		    "--cpus",
+		    "2"
+          ]
+        ],
+        "vboxmanage_post": [
+		  [
+		    "modifyvm",
+		    "{{.Name}}",
+		    "--nic2",
+		    "hostonly"
+		  ]
+
+       ]
+      }
+    ]
+  }
